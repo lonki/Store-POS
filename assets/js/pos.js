@@ -1312,41 +1312,46 @@ if (auth == undefined) {
             $('#fullname').val(allUsers[index].fullname);
             $('#username').val(allUsers[index].username);
             $('#password').val(atob(allUsers[index].password));
+            
+            $('#perm_products').prop("checked", true);
+            $('#perm_categories').prop("checked", true);
+            $('#perm_transactions').prop("checked", true);
+            $('#perm_users').prop("checked", true);
+            $('#perm_settings').prop("checked", true);
+            // if (allUsers[index].perm_products == 1) {
+            //     $('#perm_products').prop("checked", true);
+            // }
+            // else {
+            //     $('#perm_products').prop("checked", false);
+            // }
 
-            if (allUsers[index].perm_products == 1) {
-                $('#perm_products').prop("checked", true);
-            }
-            else {
-                $('#perm_products').prop("checked", false);
-            }
+            // if (allUsers[index].perm_categories == 1) {
+            //     $('#perm_categories').prop("checked", true);
+            // }
+            // else {
+            //     $('#perm_categories').prop("checked", false);
+            // }
 
-            if (allUsers[index].perm_categories == 1) {
-                $('#perm_categories').prop("checked", true);
-            }
-            else {
-                $('#perm_categories').prop("checked", false);
-            }
+            // if (allUsers[index].perm_transactions == 1) {
+            //     $('#perm_transactions').prop("checked", true);
+            // }
+            // else {
+            //     $('#perm_transactions').prop("checked", false);
+            // }
 
-            if (allUsers[index].perm_transactions == 1) {
-                $('#perm_transactions').prop("checked", true);
-            }
-            else {
-                $('#perm_transactions').prop("checked", false);
-            }
+            // if (allUsers[index].perm_users == 1) {
+            //     $('#perm_users').prop("checked", true);
+            // }
+            // else {
+            //     $('#perm_users').prop("checked", false);
+            // }
 
-            if (allUsers[index].perm_users == 1) {
-                $('#perm_users').prop("checked", true);
-            }
-            else {
-                $('#perm_users').prop("checked", false);
-            }
-
-            if (allUsers[index].perm_settings == 1) {
-                $('#perm_settings').prop("checked", true);
-            }
-            else {
-                $('#perm_settings').prop("checked", false);
-            }
+            // if (allUsers[index].perm_settings == 1) {
+            //     $('#perm_settings').prop("checked", true);
+            // }
+            // else {
+            //     $('#perm_settings').prop("checked", false);
+            // }
 
             $('#userModal').modal('show');
         }
