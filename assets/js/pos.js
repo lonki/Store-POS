@@ -986,7 +986,8 @@ if (auth == undefined) {
                         product_name: product.product_name,
                         sku: product.sku,
                         price: product.price,
-                        quantity: product.quantity
+                        quantity: product.quantity,
+                        profit: product.profit
                     };
                     cart.push(item);
                 })
@@ -1009,7 +1010,8 @@ if (auth == undefined) {
                         product_name: product.product_name,
                         sku: product.sku,
                         price: product.price,
-                        quantity: product.quantity
+                        quantity: product.quantity,
+                        profit: product.profit
                     };
                     cart.push(item);
                 })
