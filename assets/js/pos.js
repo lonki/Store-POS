@@ -23,23 +23,19 @@ let user_index = 0;
 let product_index = 0;
 let transaction_index;
 let host = 'localhost';
-let path = require('path');
-let port = '8001';
-let notiflix = require('notiflix');
-let moment = require('moment');
-let Swal = require('sweetalert2');
-let { ipcRenderer } = require('electron');
+// let path = require('path');
+let port = '80';
+let notiflix = Notiflix;
+let moment = window.moment;
+let Swal = window.sweetAlert;
+// let { ipcRenderer } = require('electron');
 let dotInterval = setInterval(function () { $(".dot").text('.') }, 3000);
-let Store = require('electron-store');
-const remote = require('electron').remote;
-const app = remote.app;
-let img_path = app.getPath('appData') + '/POS/uploads/';
+let img_path = 'database/POS/uploads/';
 let api = 'http://' + host + ':' + port + '/api/';
-let btoa = require('btoa');
-let jsPDF = require('jspdf');
-let html2canvas = require('html2canvas');
-let JsBarcode = require('jsbarcode');
-let macaddress = require('macaddress');
+let jsPDF = window.jspdf;
+let html2canvas = window.html2canvas;
+let JsBarcode = window.JsBarcode;
+// let macaddress = require('macaddress');
 let categories = [];
 let holdOrderList = [];
 let customerOrderList = [];
@@ -50,7 +46,7 @@ let auth_error = 'Incorrect username or password';
 let auth_empty = 'Please enter a username and password';
 let holdOrderlocation = $("#randerHoldOrders");
 let customerOrderLocation = $("#randerCustomerOrders");
-let storage = new Store();
+let storage = window.localStorage;
 let settings;
 let platform;
 let user = {};
@@ -110,8 +106,8 @@ $.fn.serializeObject = function () {
 };
 
 
-auth = storage.get('auth');
-user = storage.get('user');
+auth = storage.getItem('auth') ? JSON.parse(storage.getItem('auth')) : undefined;
+user = storage.getItem('user') ? JSON.parse(storage.getItem('user')) : undefined;
 
 
 if (auth == undefined) {
@@ -127,7 +123,7 @@ if (auth == undefined) {
         $('#loading').hide();
     }, 2000);
 
-    platform = storage.get('settings');
+    platform = storage.getItem('settings') ? JSON.parse(storage.getItem('settings')) : undefined;;
 
     if (platform != undefined) {
 
@@ -1648,9 +1644,10 @@ if (auth == undefined) {
 
                 if (result.value) {
                     $.get(api + 'users/logout/' + user._id, function (data) {
-                        storage.delete('auth');
-                        storage.delete('user');
-                        ipcRenderer.send('app-reload', '');
+                        storage.removeItem('auth');
+                        storage.removeItem('user');
+                        // ipcRenderer.send('app-reload', '');
+                        window.location.reload();
                     });
                 }
             });
@@ -1661,13 +1658,13 @@ if (auth == undefined) {
         $('#settings_form').on('submit', function (e) {
             e.preventDefault();
             let formData = $(this).serializeObject();
-            let mac_address;
+            let mac_address = '';
 
             api = 'http://' + host + ':' + port + '/api/';
 
-            macaddress.one(function (err, mac) {
-                mac_address = mac;
-            });
+            // macaddress.one(function (err, mac) {
+            //     mac_address = mac;
+            // });
 
             formData['app'] = $('#app').find('option:selected').text();
             formData['mac'] = mac_address;
@@ -1683,7 +1680,7 @@ if (auth == undefined) {
                 );
             }
             else {
-                storage.set('settings', formData);
+                storage.setItem('settings', JSON.stringify(formData));
 
                 $(this).attr('action', api + 'settings/post');
                 $(this).attr('method', 'POST');
@@ -1692,8 +1689,8 @@ if (auth == undefined) {
                 $(this).ajaxSubmit({
                     contentType: 'application/json',
                     success: function (response) {
-
-                        ipcRenderer.send('app-reload', '');
+                        window.location.reload();
+                        // ipcRenderer.send('app-reload', '');
 
                     }, error: function (data) {
                         console.log(data);
@@ -1721,8 +1718,9 @@ if (auth == undefined) {
             else {
                 if (isNumeric(formData.till)) {
                     formData['app'] = $('#app').find('option:selected').text();
-                    storage.set('settings', formData);
-                    ipcRenderer.send('app-reload', '');
+                    storage.setItem('settings', JSON.stringify(formData));
+                    // ipcRenderer.send('app-reload', '');
+                    window.location.reload();
                 }
                 else {
                     Swal.fire(
@@ -1779,7 +1777,8 @@ if (auth == undefined) {
                     success: function (data) {
 
                         if (ownUserEdit) {
-                            ipcRenderer.send('app-reload', '');
+                            // ipcRenderer.send('app-reload', '');
+                            window.location.reload();
                         }
 
                         else {
@@ -1812,9 +1811,9 @@ if (auth == undefined) {
             if ($(this).find('option:selected').text() == 'Network Point of Sale Terminal') {
                 $('#net_settings_form').show(500);
                 $('#settings_form').hide(500);
-                macaddress.one(function (err, mac) {
-                    $("#mac").val(mac);
-                });
+                // macaddress.one(function (err, mac) {
+                //     $("#mac").val(mac);
+                // });
             }
             else {
                 $('#net_settings_form').hide(500);
@@ -1862,9 +1861,9 @@ if (auth == undefined) {
                 $("#ip").val(platform.ip);
                 $("#till").val(platform.till);
 
-                macaddress.one(function (err, mac) {
-                    $("#mac").val(mac);
-                });
+                // macaddress.one(function (err, mac) {
+                //     $("#mac").val(mac);
+                // });
 
                 $("#app option").filter(function () {
                     return $(this).text() == platform.app;
@@ -2365,9 +2364,11 @@ $('body').on("submit", "#account", function (e) {
             processData: false,
             success: function (data) {
                 if (data._id) {
-                    storage.set('auth', { auth: true });
-                    storage.set('user', data);
-                    ipcRenderer.send('app-reload', '');
+                    console.log()
+                    storage.setItem('auth', JSON.stringify({ auth: true }));
+                    storage.setItem('user', JSON.stringify(data));
+                    // ipcRenderer.send('app-reload', '');
+                    window.location.reload();
                 }
                 else {
                     Swal.fire(
@@ -2384,6 +2385,16 @@ $('body').on("submit", "#account", function (e) {
     }
 });
 
+function closewin(){
+    if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Chrome") !=-1) {
+        window.location.href="about:blank";
+        window.close();
+    } else {
+        window.opener = null;
+        window.open("", "_self");
+        window.close();
+    }
+}
 
 $('#quit').click(function () {
     Swal.fire({
@@ -2395,9 +2406,9 @@ $('#quit').click(function () {
         cancelButtonColor: '#3085d6',
         confirmButtonText: 'Close Application'
     }).then((result) => {
-
         if (result.value) {
-            ipcRenderer.send('app-quit', '');
+            // ipcRenderer.send('app-quit', '');
+            closewin();
         }
     });
 });

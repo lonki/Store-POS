@@ -1,3 +1,4 @@
+require('dotenv').config();
 let express = require("express"),
   http = require("http"),
   app = require("express")(),
@@ -25,9 +26,16 @@ app.all("/*", function(req, res, next) {
   }
 });
 
-app.get("/", function(req, res) {
-  res.send("POS Server Online.");
-});
+// app.get("/", function(req, res) {
+//   res.send("POS Server Online.");
+// });
+
+app.get('/', function (req, res) {
+  res.sendFile( __dirname + "/" + "index.html" );
+})
+
+app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/database/POS/uploads', express.static(__dirname + '/database/POS/uploads'));
 
 app.use("/api/inventory", require("./api/inventory"));
 app.use("/api/customers", require("./api/customers"));
