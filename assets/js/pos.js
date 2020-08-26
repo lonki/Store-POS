@@ -24,14 +24,14 @@ let product_index = 0;
 let transaction_index;
 let host = '';
 // let path = require('path');
-let port = '80';
+// let port = '80';
 let notiflix = Notiflix;
 let moment = window.moment;
 let Swal = window.sweetAlert;
 // let { ipcRenderer } = require('electron');
 let dotInterval = setInterval(function () { $(".dot").text('.') }, 3000);
 let img_path = 'database/POS/uploads/';
-let api = 'http://' + host + ':' + port + '/api/';
+let api = '/api/';
 let jsPDF = window.jspdf;
 let html2canvas = window.html2canvas;
 let JsBarcode = window.JsBarcode;
@@ -128,7 +128,7 @@ if (auth == undefined) {
     if (platform != undefined) {
 
         if (platform.app == 'Network Point of Sale Terminal') {
-            api = 'http://' + platform.ip + ':' + port + '/api/';
+            // api = 'http://' + platform.ip + ':' + port + '/api/';
             perms = true;
         }
     }
@@ -1660,7 +1660,7 @@ if (auth == undefined) {
             let formData = $(this).serializeObject();
             let mac_address = '';
 
-            api = 'http://' + host + ':' + port + '/api/';
+            // api = 'http://' + host + ':' + port + '/api/';
 
             // macaddress.one(function (err, mac) {
             //     mac_address = mac;
