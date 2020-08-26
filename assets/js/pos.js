@@ -22,7 +22,7 @@ let order_index = 0;
 let user_index = 0;
 let product_index = 0;
 let transaction_index;
-let host = 'localhost';
+let host = '';
 // let path = require('path');
 let port = '80';
 let notiflix = Notiflix;
