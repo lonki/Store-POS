@@ -9,13 +9,13 @@
 
 #cartTable tbody { 
   display: block; 
-  height: calc(100vh - 425px);
+  height: 35vh;
   overflow: auto;
 }
 
 #parent { 
   display: block; 
-  height: calc(100vh - 215px);
+  height: 65vh;
   overflow: auto;
   overflow: hidden;
 }
