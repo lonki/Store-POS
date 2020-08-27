@@ -2165,3 +2165,16 @@ body.fixed-left .side-menu.left {
     margin-top: 0px;
   }
 }
+
+@media (max-width:1024px) {
+  .card-box {
+    padding: 10px;
+  }
+  .input-group-btn .btn {
+    padding: 5px 10px;
+  }
+  .input-group .form-control {
+    min-width: 30px;
+    height: 32px;
+  }
+}

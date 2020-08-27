@@ -187,7 +187,7 @@ if (auth == undefined) {
 
         });
 
-
+        console.log(user)
         if (0 == user.perm_products) { $(".p_one").hide() };
         if (0 == user.perm_categories) { $(".p_two").hide() };
         if (0 == user.perm_transactions) { $(".p_three").hide() };
@@ -199,7 +199,7 @@ if (auth == undefined) {
             $.get(api + 'inventory/products', function (data) {
 
                 data.forEach(item => {
-                    item.price = parseFloat(item.price).toFixed(2);
+                    item.price = parseFloat(item.price).toFixed(0);
                 });
 
                 allProducts = [...data];
@@ -247,7 +247,7 @@ if (auth == undefined) {
                         categories.push(item.category);
                     }
 
-                    let item_info = `<div class="col-lg-2 box ${item.category}"
+                    let item_info = `<div class="col-xs-4 col-sm-4 col-lg-2 box ${item.category}"
                                 onclick="$(this).addToCart(${item._id}, ${item.quantity}, ${item.stock})">
                             <div class="widget-panel widget-style-2 ">                    
                             <div id="image"><img src="${item.img == "" ? "./assets/images/default.jpg" : img_path + item.img}" id="product_img" alt=""></div>                    
@@ -468,7 +468,7 @@ if (auth == undefined) {
             });
 
             //total = total - $("#inputDiscount").val();
-            $('#price').text(total.toFixed(2) + " " + settings.symbol);
+            $('#price').text(total.toFixed(0) + " " + settings.symbol);
 
             subTotal = total;
 
@@ -487,7 +487,7 @@ if (auth == undefined) {
 
             orderTotal = total;
 
-            // $("#gross_price").text(grossTotal.toFixed(2) + " " + settings.symbol);
+            // $("#gross_price").text(grossTotal.toFixed(0) + " " + settings.symbol);
             $("#payablePrice").val(total);
         };
 
@@ -527,7 +527,7 @@ if (auth == undefined) {
                                 )
                             )
                         ),
-                        $('<td>', { text: (data.price * data.quantity).toFixed(2) }), //+ settings.symbol 
+                        $('<td>', { text: (data.price * data.quantity).toFixed(0) }), //+ settings.symbol 
                         $('<td>').append(
                             $('<button>', {
                                 class: 'btn btn-danger btn-xs',
@@ -667,7 +667,7 @@ if (auth == undefined) {
 
             cart.forEach(item => {
 
-                items += "<tr><td>" + item.product_name + "</td><td>" + item.quantity + "</td><td>" + parseFloat(item.price).toFixed(2) + " " + settings.symbol + "</td></tr>";
+                items += "<tr><td>" + item.product_name + "</td><td>" + item.quantity + "</td><td>" + parseFloat(item.price).toFixed(0) + " " + settings.symbol + "</td></tr>";
 
             });
 
@@ -677,8 +677,8 @@ if (auth == undefined) {
             let discount = 0;
             let customer = JSON.parse($("#customer").val());
             let date = moment(currentTime).format("YYYY-MM-DD HH:mm:ss");
-            let paid = $("#payment").val() == "" ? "" : parseFloat($("#payment").val()).toFixed(2);
-            let change = $("#change").text() == "" ? "" : parseFloat($("#change").text()).toFixed(2);
+            let paid = $("#payment").val() == "" ? "" : parseFloat($("#payment").val()).toFixed(0);
+            let change = $("#change").text() == "" ? "" : parseFloat($("#change").text()).toFixed(0);
             let refNumber = $("#refNumber").val();
             let orderNumber = holdOrder;
             let type = "";
@@ -707,7 +707,7 @@ if (auth == undefined) {
                     <tr>
                         <td>Change</td>
                         <td>:</td>
-                        <td>${Math.abs(change).toFixed(2) + " " + settings.symbol}</td>
+                        <td>${Math.abs(change).toFixed(0) + " " + settings.symbol}</td>
                     </tr>
                     <tr>
                         <td>Method</td>
@@ -722,7 +722,7 @@ if (auth == undefined) {
                 tax_row = `<tr>
                     <td>Vat(${settings.percentage})% </td>
                     <td>:</td>
-                    <td>${parseFloat(totalVat).toFixed(2)} ${settings.symbol}</td>
+                    <td>${parseFloat(totalVat).toFixed(0)} ${settings.symbol}</td>
                 </tr>`;
             }
 
@@ -791,12 +791,12 @@ if (auth == undefined) {
             <tr>                        
                 <td><b>Subtotal</b></td>
                 <td>:</td>
-                <td><b>${subTotal.toFixed(2)} ${settings.symbol}</b></td>
+                <td><b>${subTotal.toFixed(0)} ${settings.symbol}</b></td>
             </tr>
             <tr>
                 <td>Discount</td>
                 <td>:</td>
-                <td>${discount > 0 ? settings.symbol + parseFloat(discount).toFixed(2) : ''}</td>
+                <td>${discount > 0 ? settings.symbol + parseFloat(discount).toFixed(0) : ''}</td>
             </tr>
             
             ${tax_row}
@@ -805,7 +805,7 @@ if (auth == undefined) {
                 <td><h3>Total</h3></td>
                 <td><h3>:</h3></td>
                 <td>
-                    <h3>${parseFloat(orderTotal).toFixed(2)} ${settings.symbol}</h3>
+                    <h3>${parseFloat(orderTotal).toFixed(0)} ${settings.symbol}</h3>
                 </td>
             </tr>
             ${payment == 0 ? '' : payment}
@@ -843,7 +843,7 @@ if (auth == undefined) {
                 discount: discount,
                 customer: customer,
                 status: status,
-                subtotal: parseFloat(subTotal).toFixed(2),
+                subtotal: parseFloat(subTotal).toFixed(0),
                 tax: totalVat,
                 order_type: 1,
                 items: cart,
@@ -1303,7 +1303,6 @@ if (auth == undefined) {
 
 
         $.fn.editUser = function (index) {
-
             user_index = index;
 
             $('#Users').modal('hide');
@@ -1315,45 +1314,40 @@ if (auth == undefined) {
             $('#username').val(allUsers[index].username);
             $('#password').val(atob(allUsers[index].password));
             
-            $('#perm_products').prop("checked", true);
-            $('#perm_categories').prop("checked", true);
-            $('#perm_transactions').prop("checked", true);
-            $('#perm_users').prop("checked", true);
-            $('#perm_settings').prop("checked", true);
-            // if (allUsers[index].perm_products == 1) {
-            //     $('#perm_products').prop("checked", true);
-            // }
-            // else {
-            //     $('#perm_products').prop("checked", false);
-            // }
+            if (allUsers[index].perm_products == 1) {
+                $('#perm_products').prop("checked", true);
+            }
+            else {
+                $('#perm_products').prop("checked", false);
+            }
 
-            // if (allUsers[index].perm_categories == 1) {
-            //     $('#perm_categories').prop("checked", true);
-            // }
-            // else {
-            //     $('#perm_categories').prop("checked", false);
-            // }
+            if (allUsers[index].perm_categories == 1) {
+                $('#perm_categories').prop("checked", true);
+            }
+            else {
+                $('#perm_categories').prop("checked", false);
+            }
 
-            // if (allUsers[index].perm_transactions == 1) {
-            //     $('#perm_transactions').prop("checked", true);
-            // }
-            // else {
-            //     $('#perm_transactions').prop("checked", false);
-            // }
+            if (allUsers[index].perm_transactions == 1) {
+                $('#perm_transactions').prop("checked", true);
+            }
+            else {
+                $('#perm_transactions').prop("checked", false);
+            }
 
-            // if (allUsers[index].perm_users == 1) {
-            //     $('#perm_users').prop("checked", true);
-            // }
-            // else {
-            //     $('#perm_users').prop("checked", false);
-            // }
+            if (allUsers[index].perm_users == 1) {
+                $('#perm_users').prop("checked", true);
+            }
+            else {
+                $('#perm_users').prop("checked", false);
+            }
 
-            // if (allUsers[index].perm_settings == 1) {
-            //     $('#perm_settings').prop("checked", true);
-            // }
-            // else {
-            //     $('#perm_settings').prop("checked", false);
-            // }
+            if (allUsers[index].perm_settings == 1) {
+                $('#perm_settings').prop("checked", true);
+            }
+            else {
+                $('#perm_settings').prop("checked", false);
+            }
 
             $('#userModal').modal('show');
         }
@@ -1842,6 +1836,11 @@ if (auth == undefined) {
             $("#username").val(user.username);
             $("#password").val(atob(user.password));
 
+            $('#perm_products').prop("checked", user.perm_products);
+            $('#perm_categories').prop("checked", user.perm_categories);
+            $('#perm_transactions').prop("checked", user.perm_transactions);
+            $('#perm_users').prop("checked", user.perm_users);
+            $('#perm_settings').prop("checked", user.perm_settings);
         });
 
 
@@ -2030,7 +2029,7 @@ function loadTransactions() {
                                 <td class="nobr">${moment(trans.date).format('YYYY MMM DD hh:mm:ss')}</td>
                                 <td>${trans.total + " " + settings.symbol}</td>
                                 <td>${trans.paid == "" ? "" : trans.paid + " " + settings.symbol}</td>
-                                <td>${trans.change ? Math.abs(trans.change).toFixed(2) + " " + settings.symbol : ''}</td>
+                                <td>${trans.change ? Math.abs(trans.change).toFixed(0) + " " + settings.symbol : ''}</td>
                                 <td>${trans.paid == "" ? "" : trans.payment_type == 0 ? "Cash" : 'Card'}</td>
                                 <td>${subProfit + " " + settings.symbol}</td>
                                 <td>${trans.user}</td>
@@ -2039,7 +2038,7 @@ function loadTransactions() {
                 subProfit = 0;
                 if (counter == transactions.length) {
 
-                    $('#total_sales #counter').text(parseFloat(sales).toFixed(2) + " " + settings.symbol);
+                    $('#total_sales #counter').text(parseFloat(sales).toFixed(0) + " " + settings.symbol);
                     $('#total_transactions #counter').text(transact);
                     $('#total_profit #counter').text(totalProfit + " " + settings.symbol);
                     const result = {};
@@ -2138,7 +2137,7 @@ function loadSoldProducts() {
             <td>${item.product}</td>
             <td>${item.qty}</td>
             <td>${product[0].stock == 1 ? product.length > 0 ? product[0].quantity : '' : 'N/A'}</td>
-            <td>${(item.qty * parseFloat(item.price)).toFixed(2) + " " + settings.symbol}</td>
+            <td>${(item.qty * parseFloat(item.price)).toFixed(0) + " " + settings.symbol}</td>
             </tr>`;
 
         if (counter == sold.length) {
@@ -2191,7 +2190,7 @@ $.fn.viewTransaction = function (index) {
     let products = allTransactions[index].items;
 
     products.forEach(item => {
-        items += "<tr><td>" + item.product_name + "</td><td>" + item.quantity + "</td><td>" + parseFloat(item.price).toFixed(2) + " " + settings.symbol + "</td></tr>";
+        items += "<tr><td>" + item.product_name + "</td><td>" + item.quantity + "</td><td>" + parseFloat(item.price).toFixed(0) + " " + settings.symbol + "</td></tr>";
 
     });
 
@@ -2215,7 +2214,7 @@ $.fn.viewTransaction = function (index) {
                 <tr>
                     <td>Change</td>
                     <td>:</td>
-                    <td>${Math.abs(allTransactions[index].change).toFixed(2) + " " + settings.symbol}</td>
+                    <td>${Math.abs(allTransactions[index].change).toFixed(0) + " " + settings.symbol}</td>
                 </tr>
                 <tr>
                     <td>Method</td>
@@ -2230,7 +2229,7 @@ $.fn.viewTransaction = function (index) {
         tax_row = `<tr>
                 <td>Vat(${settings.percentage})% </td>
                 <td>:</td>
-                <td>${parseFloat(allTransactions[index].tax).toFixed(2)} ${settings.symbol}</td>
+                <td>${parseFloat(allTransactions[index].tax).toFixed(0)} ${settings.symbol}</td>
             </tr>`;
     }
 
@@ -2276,7 +2275,7 @@ $.fn.viewTransaction = function (index) {
         <tr>
             <td>Discount</td>
             <td>:</td>
-            <td>${discount > 0 ? parseFloat(allTransactions[index].discount).toFixed(2) + " " + settings.symbol : ''}</td>
+            <td>${discount > 0 ? parseFloat(allTransactions[index].discount).toFixed(0) + " " + settings.symbol : ''}</td>
         </tr>
         
         ${tax_row}

@@ -998,6 +998,13 @@ ul.ColVis_collection li {
 
 .custom-btn {
   font-size: 25px !important;
-   margin : 5px 
+  margin : 5px 
   
+}
+
+@media (max-width:1024px) {
+  .custom-btn {
+    font-size: 15px !important;
+    margin : 5px 
+  }
 }
