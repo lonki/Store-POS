@@ -141,6 +141,7 @@ if (auth == undefined) {
 
     $.get(api + 'settings/get', function (data) {
         settings = data.settings;
+        storage.setItem('settings', JSON.stringify(data.settings));
     });
 
 
@@ -187,7 +188,6 @@ if (auth == undefined) {
 
         });
 
-        console.log(user)
         if (0 == user.perm_products) { $(".p_one").hide() };
         if (0 == user.perm_categories) { $(".p_two").hide() };
         if (0 == user.perm_transactions) { $(".p_three").hide() };
