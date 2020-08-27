@@ -48,7 +48,6 @@ let holdOrderlocation = $("#randerHoldOrders");
 let customerOrderLocation = $("#randerCustomerOrders");
 let storage = window.localStorage;
 let settings;
-let platform;
 let user = {};
 let start = moment().startOf('month');
 let end = moment();
@@ -122,16 +121,6 @@ if (auth == undefined) {
     setTimeout(function () {
         $('#loading').hide();
     }, 2000);
-
-    platform = storage.getItem('settings') ? JSON.parse(storage.getItem('settings')) : undefined;;
-
-    if (platform != undefined) {
-
-        if (platform.app == 'Network Point of Sale Terminal') {
-            // api = 'http://' + platform.ip + ':' + port + '/api/';
-            perms = true;
-        }
-    }
 
     $.get(api + 'users/user/' + user._id, function (data) {
         user = data;
@@ -854,8 +843,8 @@ if (auth == undefined) {
                 paid: paid,
                 change: change,
                 _id: orderNumber,
-                till: platform.till,
-                mac: platform.mac,
+                till: '',
+                mac: '',
                 user: user.fullname,
                 user_id: user._id
             }
@@ -1847,10 +1836,6 @@ if (auth == undefined) {
 
         $('#add-user').click(function () {
 
-            if (platform.app != 'Network Point of Sale Terminal') {
-                $('.perms').show();
-            }
-
             $("#saveUser").get(0).reset();
             $('#userModal').modal('show');
 
@@ -1860,52 +1845,31 @@ if (auth == undefined) {
 
         $('#settings').click(function () {
 
-            if (platform.app == 'Network Point of Sale Terminal') {
-                $('#net_settings_form').show(500);
-                $('#settings_form').hide(500);
+            $('#net_settings_form').hide(500);
+            $('#settings_form').show(500);
 
-                $("#ip").val(platform.ip);
-                $("#till").val(platform.till);
-
-                // macaddress.one(function (err, mac) {
-                //     $("#mac").val(mac);
-                // });
-
-                $("#app option").filter(function () {
-                    return $(this).text() == platform.app;
-                }).prop("selected", true);
+            $("#settings_id").val("1");
+            $("#store").val(settings.store);
+            $("#address_one").val(settings.address_one);
+            $("#address_two").val(settings.address_two);
+            $("#contact").val(settings.contact);
+            $("#tax").val(settings.tax);
+            $("#symbol").val(settings.symbol);
+            $("#percentage").val(settings.percentage);
+            $("#footer").val(settings.footer);
+            $("#logo_img").val(settings.img);
+            if (settings.charge_tax == 'on') {
+                $('#charge_tax').prop("checked", true);
             }
-            else {
-                $('#net_settings_form').hide(500);
-                $('#settings_form').show(500);
-
-                $("#settings_id").val("1");
-                $("#store").val(settings.store);
-                $("#address_one").val(settings.address_one);
-                $("#address_two").val(settings.address_two);
-                $("#contact").val(settings.contact);
-                $("#tax").val(settings.tax);
-                $("#symbol").val(settings.symbol);
-                $("#percentage").val(settings.percentage);
-                $("#footer").val(settings.footer);
-                $("#logo_img").val(settings.img);
-                if (settings.charge_tax == 'on') {
-                    $('#charge_tax').prop("checked", true);
-                }
-                if (settings.img != "") {
-                    $('#logoname').hide();
-                    $('#current_logo').html(`<img src="${img_path + settings.img}" alt="">`);
-                    $('#rmv_logo').show();
-                }
-
-                $("#app option").filter(function () {
-                    return $(this).text() == settings.app;
-                }).prop("selected", true);
+            if (settings.img != "") {
+                $('#logoname').hide();
+                $('#current_logo').html(`<img src="${img_path + settings.img}" alt="">`);
+                $('#rmv_logo').show();
             }
 
-
-
-
+            $("#app option").filter(function () {
+                return $(this).text() == settings.app;
+            }).prop("selected", true);
         });
 
 
